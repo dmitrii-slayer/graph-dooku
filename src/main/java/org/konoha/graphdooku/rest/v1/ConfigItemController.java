@@ -19,7 +19,6 @@ import java.util.Map;
 public class ConfigItemController {
 
     private final ConfigItemService configItemService;
-    private final ObjectMapper mapper = new ObjectMapper();
 
 //    @PostMapping("/ci")
 //    public ResponseEntity<String> saveConfigItem(@RequestBody ConfigItem configItem) {
@@ -29,21 +28,7 @@ public class ConfigItemController {
 
     @PostMapping("/ci")
     public ResponseEntity<String> saveConfigItem(@RequestBody JsonNode configItemJson) {
-        Map<String, Object> ciFields = new HashMap<>();
-        Iterator<Map.Entry<String, JsonNode>> fields = configItemJson.get("fields").fields();
-        fields.forEachRemaining(entry -> {
-            JsonNode value = entry.getValue();
-            if (value.isObject() || value.isArray()) {
-                ciFields.put(entry.getKey(), value.toPrettyString());
-            } else {
-                ciFields.put(entry.getKey(), value.asText());
-            }
-        });
-        ConfigItem ci = ConfigItem.builder()
-                .businessId(configItemJson.get("businessId").textValue())
-                .fields(ciFields)
-                .build();
-        configItemService.saveConfigItem(ci);
+        configItemService.processCiEvent(configItemJson);
         return ResponseEntity.ok("OK");
     }
 }
