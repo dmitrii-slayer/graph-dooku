@@ -3,6 +3,7 @@ package org.konoha.graphdooku.domain.entity;
 import lombok.Data;
 import org.springframework.data.neo4j.core.schema.*;
 
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -22,7 +23,7 @@ public class Movie {
     @Relationship(type = "ACTED_IN", direction = Relationship.Direction.INCOMING)
     private Set<ActedInRelation> actedInRelations;
 
-//    @CompositeProperty
-//    private Map<String, Object> attributes;
+    @CompositeProperty
+    private Map<String, Object> attributes;
 
 }
